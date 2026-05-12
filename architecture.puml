@@ -1,0 +1,46 @@
+@startuml
+
+interface RequestRepository {
+    +exists(studentId, topic)
+    +save(request)
+}
+
+interface NotificationService {
+    +send(studentId, message)
+}
+
+interface AuditLogger {
+    +write(message)
+}
+
+interface ResponseGenerator {
+    +generate(topic)
+}
+
+class RequestService {
+    -repository
+    -notifier
+    -logger
+    -responseGenerator
+
+    +process(request)
+}
+
+class SqlRequestRepository
+class EmailNotifier
+class MessengerNotifier
+class FileAuditLogger
+class DefaultResponseGenerator
+
+RequestService --> RequestRepository
+RequestService --> NotificationService
+RequestService --> AuditLogger
+RequestService --> ResponseGenerator
+
+SqlRequestRepository ..|> RequestRepository
+EmailNotifier ..|> NotificationService
+MessengerNotifier ..|> NotificationService
+FileAuditLogger ..|> AuditLogger
+DefaultResponseGenerator ..|> ResponseGenerator
+
+@enduml
